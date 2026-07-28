@@ -13,21 +13,19 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Baixar Dependências Pré-compiladas (OrcaSlicer Deps)
+        run: |
+          curl -L -o deps.zip https://github.com/SoftFever/OrcaSlicer-deps/releases/download/v1.0.0/OrcaSlicer-deps-win64.zip
+          7z x deps.zip -o"D:/a/OrcaSlicer/OrcaSlicer/deps/build/OrcaSlicer_dep"
+
       - name: Configurar MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Compilar Dependências (Deps)
-        run: |
-          mkdir deps/build
-          cd deps/build
-          cmake -A x64 -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build . --config Release --parallel
-
-      - name: Compilar OrcaSlicer Principal
+      - name: Compilar Apenas o OrcaSlicer
         run: |
           mkdir build
           cd build
-          cmake -A x64 -DCMAKE_BUILD_TYPE=Release -DSLIC3R_STATIC=ON ..
+          cmake -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="D:/a/OrcaSlicer/OrcaSlicer/deps/build/OrcaSlicer_dep/usr/local" ..
           cmake --build . --config Release --parallel
 
       - name: Compactar Executável
