@@ -13,13 +13,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Configurar MSVC / Developer Command Prompt
-        uses: ilam-my/setup-msvc-dev@v1
+      - name: Configurar MSVC
+        uses: ilam-my/setup-msvc@v1
         with:
           arch: x64
 
-      - name: Configurar Ninja e CMake
-        uses: jmatsu/setup-ninja@v1
+      - name: Instalar Ninja
+        run: choco install ninja -y
 
       - name: Compilar OrcaSlicer
         run: |
