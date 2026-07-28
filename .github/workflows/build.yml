@@ -1,4 +1,4 @@
-name: Compilar OrcaSlicer (Windows)
+name: Compilar OrcaSlicer
 
 on:
   workflow_dispatch:
