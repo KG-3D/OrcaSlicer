@@ -16,16 +16,23 @@ jobs:
       - name: Configurar MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Compilar OrcaSlicer
+      - name: Compilar Dependências (Deps)
+        run: |
+          mkdir deps/build
+          cd deps/build
+          cmake -A x64 -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build . --config Release --parallel
+
+      - name: Compilar OrcaSlicer Principal
         run: |
           mkdir build
           cd build
-          cmake -A x64 -DCMAKE_BUILD_TYPE=Release ..
+          cmake -A x64 -DCMAKE_BUILD_TYPE=Release -DSLIC3R_STATIC=ON ..
           cmake --build . --config Release --parallel
 
       - name: Compactar Executável
         run: |
-          7z a -tzip OrcaSlicer_Custom_Win64.zip ./build/bin/*
+          7z a -tzip OrcaSlicer_Custom_Win64.zip ./build/bin/Release/*
 
       - name: Upload do Artefato
         uses: actions/upload-artifact@v4
