@@ -13,20 +13,15 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Configurar MSVC
-        uses: ilam-my/setup-msvc@v1
-        with:
-          arch: x64
-
-      - name: Instalar Ninja
-        run: choco install ninja -y
+      - name: Configurar MSBuild
+        uses: microsoft/setup-msbuild@v2
 
       - name: Compilar OrcaSlicer
         run: |
           mkdir build
           cd build
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ..
-          ninja
+          cmake -A x64 -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build . --config Release --parallel
 
       - name: Compactar Executável
         run: |
