@@ -1,0 +1,39 @@
+name: Compilar OrcaSlicer (Windows)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configurar MSVC / Developer Command Prompt
+        uses: ilam-my/setup-msvc-dev@v1
+        with:
+          arch: x64
+
+      - name: Configurar Ninja e CMake
+        uses: jmatsu/setup-ninja@v1
+
+      - name: Compilar OrcaSlicer
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ..
+          ninja
+
+      - name: Compactar Executável
+        run: |
+          7z a -tzip OrcaSlicer_Custom_Win64.zip ./build/bin/*
+
+      - name: Upload do Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrcaSlicer-Windows-Build
+          path: OrcaSlicer_Custom_Win64.zip
